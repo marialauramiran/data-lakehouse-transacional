@@ -18,7 +18,7 @@ display(df_gold)
 
 # Utilizar um dos Formatos Open Data (Delta Lake, Apache Iceberg ou Apache Hudi) para armazenar a tabela final
 df_gold.write \
-    .format("iceberg") \
+    .format("delta") \
     .mode("overwrite") \
     .saveAsTable("gold.gold_credit_card_fraud")
 
