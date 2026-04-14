@@ -1,5 +1,12 @@
 # Data Lakehouse Transacional 
 
+## Grupo:
+
+1.   Maria Laura - 10364833
+2.   Luana - 10749602
+3.   Vinicius - 10749478
+4.   Giulia - 10749374
+   
 ## Objetivo
 
 Criação de um pipeline de dados que simula a ingestão e o processamento de dados transacionais, aplicando as técnicas de pré-processamento e os formatos Open Data para garantir ACIDidade (Atomicidade, Consistência, Isolamento, Durabilidade).
