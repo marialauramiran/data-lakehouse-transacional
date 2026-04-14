@@ -81,3 +81,37 @@ O código também demonstra operações de manipulação de dados (INSERT, DELET
 
 Por fim, são realizadas consultas utilizando versionamento (time travel), permitindo visualizar diferentes estados da tabela ao longo do tempo. Isso garante rastreabilidade, auditoria e controle sobre as alterações realizadas na camada Gold.
 
+---
+
+## Análise de Performance das Operações ACID
+
+1- Atomicidade (Atomicity)
+No código, a atomicidade é observada principalmente na operação de MERGE INTO do csv com a tabela bronze.bronze_credit_card_fraud, que garante que a atualização ou inserção dos dados ocorra de forma completa e sem duplicação. O mesmo se aplica às operações INSERT, DELETE e UPDATE realizadas na tabela Gold. Isso evita estados inconsistentes e reduz a necessidade de reprocessamento.
+
+---
+
+2- Consistência (Consistency)
+A consistência é garantida pela definição de schema na criação das tabelas Bronze, Silver e Gold, e pelas transformações aplicadas na Silver, como cast("date") na coluna dob, renomeação dos nomes das colunas e conversões de latitude e longitude. Essas regras asseguram que os dados estejam padronizados e válidos ao longo do pipeline.
+
+---
+
+3- Isolamento (Isolation)
+O isolamento pode ser observado no uso de consultas com versionamento, como SELECT * FROM tabela VERSION AS OF X, que permitem acessar estados consistentes da tabela independentemente de outras operações em andamento, como MERGE ou UPDATE.
+
+---
+
+4- Durabilidade (Durability)
+A durabilidade é garantida pelas operações de escrita com .saveAsTable() no formato Delta, como na criação da tabela Silver e Gold. Além disso, comandos como DESCRIBE HISTORY demonstram que as alterações são persistidas e armazenadas, permitindo recuperação futura dos dados.
+
+---
+
+5- Versionamento e Performance
+O uso de comandos como DESCRIBE HISTORY e SELECT ... VERSION AS OF mostra que o Delta Lake mantém múltiplas versões dos dados. Isso evita a necessidade de reprocessamento completo ao permitir acesso a estados anteriores da tabela de forma eficiente.
+
+---
+
+6- Otimizações Aplicadas
+O uso de MERGE na camada Bronze permite processamento incremental, evitando reescrita completa dos dados. O particionamento da tabela (PARTITIONED BY (category)) melhora a performance de leitura. Já as transformações na Silver (withColumn, cast, split) e as agregações na Gold (SUM, COUNT, AVG) reduzem o volume de dados e tornam as consultas analíticas mais rápidas e eficientes.
+
+
+
